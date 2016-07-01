@@ -1,0 +1,3 @@
+Running scheduled command: '/usr/bin/php5' 'artisan' log:demo > '/dev/null' 2>&1 &
+Running scheduled command: '/usr/bin/php5' 'artisan' sms:birthday > '/dev/null' 2>&1 &
+Running scheduled command: Closure

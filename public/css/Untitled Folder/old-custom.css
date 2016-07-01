@@ -1,0 +1,31 @@
+/* import google font */
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
+
+/* Basic Layout */
+*, html, body{
+	background-color:transparent;
+	font-family: 'Lato', sans-serif;
+	font-weight: 400;	
+}
+.panel-default {
+    margin-top: 25px;
+}
+.margin-10{
+    margin: 10px auto;
+}
+.text-left{
+	text-align:left !important;
+}
+textarea#txtDesc {
+    max-width: 475px;
+    padding-left: 5px;
+}
+.navbar {
+    background-color: #f8f8f8;
+    border-bottom: 3px solid #0093DD;
+    height: 70px;
+	padding: 10px 0px;
+}
+.navbar-brand>img {
+    max-height: 35px;
+}
