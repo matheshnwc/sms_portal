@@ -87,8 +87,7 @@
 													<td class="hidden-480"> <?php echo Contactlastname($report->company_id); ?></td>
 													<td>{{ $report->mobilenumber}}</td>
 													<td>{{ $report->message}}</td>
-													<td class="hidden-480"> <?php 
-                    echo ($report->createdby); $vals=DB::table('users')->where('id','=',$report->createdby)->first(); //echo $vals->firstname; ?></td>
+													<td class="hidden-480"> {{$sendby->firstname}}</td>
 													<td class="hidden-480"> {{ $report->sentdate}}</td>
 													<td class="hidden-480"> {{ $report->status}}</td>
 	 

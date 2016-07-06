@@ -11,6 +11,7 @@
 						});
 					} );
 				</script>
+				<?php// echo $data; exit; ?>
 				<style>
 					.dataTables_wrapper.no-footer {
 						margin-left: 100px;
@@ -29,7 +30,7 @@
 								<a href="http://sms.nestweaver.com/public/home">Home</a>
 							</li>
 							<li class="active">Reports</li>
-							<li class="active">Userwise SMS</li>
+							<li class="active">Overall SMS</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="page-content">
@@ -40,44 +41,12 @@
 						</div> 
 						<div class="row">
 							<div class="col-xs-12">
-									<form class="form-horizontal" role="form" action="{{url('userwisesms')}}"  method='post'>
-<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right" for="txtfirstname"> First Name </label>
-									<div class="col-sm-9">
-										<select name="id" >
-											<option disabled="selected">--Select--</option>
-										@foreach($user as $val)
-										<option value="{{$val->id}}">{{$val->firstname}}</option>
-										@endforeach
-										</select>
-								<span><br>{!!$errors->first('firstname')!!}</span>
-									</div>
-								</div>
-								</div>				
-						</div>
-						<div class="row">
-							<div class="form-actions clearfix">
-								<div class="col-md-offset-5 col-md-6">
+							
 								
-									<button class="btn btn-info" type="submit">
-										
-										Apply
-									</button>
-<input type="hidden" name="_token" value="<?php echo csrf_token();?>">
-
-								</div>
-							</div>						 	
-						</div>			
-	</form>
-
-</div>
-
-
-
 								<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
 									<div class="dataTables_wrapper no-footer" id="dynamic-table_wrapper">
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer DTTT_selectable" role="grid" aria-describedby="dynamic-table_info">
-														@if(!$datas->count()==0)
+														@if(!$data->count()==0)
 
 											<thead>
 												<tr role="row">
@@ -98,15 +67,14 @@
 				</tr>
 				@endif
 											<tbody>	
-																@foreach($datas as $report)
+																@foreach($data as $report)
 						
 												<tr role="row" class="odd">
-													<td class="hidden-480 sorting_1"> <?php echo Contactfirstname($report->company_id); ?></td>
-													<td class="hidden-480"> <?php echo Contactlastname($report->company_id); ?></td>
-													<td>{{ $report->mobilenumber}}</td>
+													<td class="hidden-480 sorting_1"> <?php //echo Contactfirstname($report->company_id); ?></td>
+													<td class="hidden-480"> <?php //echo Contactlastname($report->company_id); ?></td>
+													<td>{{ $report->mobilenumber}}</td> <?php exit; ?>
 													<td>{{ $report->message}}</td>
-													<td class="hidden-480"> <?php 
-                    echo ($report->createdby); $vals=DB::table('users')->where('id','=',$report->createdby)->first(); //echo $vals->firstname; ?></td>
+													<td class="hidden-480"> {{$sendby->firstname}}</td>
 													<td class="hidden-480"> {{ $report->sentdate}}</td>
 													<td class="hidden-480"> {{ $report->status}}</td>
 	 
@@ -116,13 +84,9 @@
 												
 											</tbody>
 										</table>
-										<div class="col-xs-12">
-								<div class="form-group">
-    <h5>Total Send</h5>
-    
-  <h5>  {{$smssend}} <h5>
-  </div>
+										
 									</div> 
+									
 								</div>
 							</div>
 						</div>

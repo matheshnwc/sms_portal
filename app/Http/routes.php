@@ -56,6 +56,7 @@ Route::post('updateprofile','UserController@updateProfile');
 Route::get('deladminuser/{id}','UserController@deladminUser');
 Route::post('Updateuser','UserController@updateUser');
 Route::get('adminuserlist','UserController@adminUserlist');
+Route::get('adminreports','Admin\AdminController@smsReports');
 Route::get('addadminuser',function()
 {
     return view('user.addadminuser');
@@ -79,9 +80,11 @@ Route::get('contactlist', 'Admin\AdminController@ContactList');
 Route::post('savecontact','Admin\AdminController@saveContact');
 Route::get('contactlist/{id}', 'Admin\AdminController@editContact');
 Route::get('delcontact/{id}','Admin\AdminController@delContact');
-Route::get('settings', function () {
-    return view('admin.settings');
-}); 
+Route::get('contactlists', 'UserController@contactLists');
+Route::post('savecontacts','UserController@saveContacts');
+Route::get('contactlists/{id}', 'UserController@editContacts');
+Route::get('delcontacts/{id}','UserController@delContacts');
+Route::get('settings','Admin\AdminController@settings');
 Route::post('savesmsettings','Admin\AdminController@savesmSettings');
 Route::any('sendsms', 'Admin\AdminController@index');
 Route::post('postsms', 'Admin\AdminController@postsms');
@@ -94,10 +97,17 @@ Route::get('signup', function () {
     return view('company.signup');
 });
 Route::post('savesignup', 'UserController@saveSignup');
-
-
-
-
+Route::get('requestsms','Admin\AdminController@requestSms');
+Route::post('sendsmsRequest', 'Admin\AdminController@sendsmsRequest');
+Route::get('smsrequests','Admin\AdminController@smsRequest');
+Route::post('sendsmsRequest', 'Admin\AdminController@sendsmsRequest');
+Route::get('editsmsrequest/{id}','Admin\AdminController@editsmsRequest');
+Route::get('delsmsrequest/{id}','Admin\AdminController@delsmsRequest');
+Route::get('importcontact',function()
+{
+    return view('user.import');
+});
+Route::post('importdata','Admin\AdminController@Importdata');
 
 
 	

@@ -73,7 +73,7 @@
 									$email=$companydetails->email;
 								}
 								?>		 							 
-										<input type="text" id="txtemail" name='email' placeholder="Email" class="col-xs-10" value='{{$email}}' required>
+										<input type="email" id="txtemail" name='email' placeholder="Email" class="col-xs-10" value='{{$email}}' required>
 								<br>{!!$errors->first('email')!!}
 									</div>
 								</div>
@@ -115,7 +115,8 @@
 <!--
 <input type="text" id="txtsendername" name='j[url]' placeholder="Url" class="col-xs-10" value='{{$url}}' required>
 -->
-<select name="j[url]">
+<select name="j[url]" required>
+	<option value="0" disabled="selected">--Select--</option>
 @foreach($urls as $data)
 <option value="{{$data->id}}">{{$data->url}}</option>
 @endforeach

@@ -13,7 +13,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="{{url('home')}}">Home</a>
+								<a href="http://sms.nestweaver.com/public/home">Home</a>
 							</li>
 							<li class="active">Contact Management</li>
 						</ul><!-- /.breadcrumb -->
@@ -34,7 +34,7 @@
 					@include('layouts.message')
 													</div>
 <div class]='row'>
-	<form class="form-horizontal" role="form" action="{{url('savecontact')}}"  method='post'>
+	<form class="form-horizontal" role="form" action="{{url('savecontacts')}}"  method='post'>
 <div class="row clearfix"> 
 							<div class="col-md-6">
 								<h5 class="text-center">Contact Details</h5>
@@ -115,10 +115,12 @@
 						<div class="row">
 							<div class="form-actions clearfix">
 								<div class="col-md-offset-5 col-md-6">
+<!--
 									<button class="btn" type="button">
 										<i class="ace-icon fa fa-times bigger-110"></i>
 										Cancel
 									</button>
+-->
 									&nbsp; &nbsp; &nbsp;
 									<button class="btn btn-info" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
@@ -179,8 +181,8 @@
 														</td>
 														<td>
 
-		 												 <a href="{{url('contactlist')}}/{{$c->id}}">Edit</a> 
-		 												  || <a href="{{url('delcontact')}}/{{$c->id}}">Delete</a>
+		 												 <a href="{{url('contactlists')}}/{{$c->id}}">Edit</a> 
+		 												  || <a href="{{url('delcontacts')}}/{{$c->id}}">Delete</a>
 
 		 												 														</td>
 													</tr>

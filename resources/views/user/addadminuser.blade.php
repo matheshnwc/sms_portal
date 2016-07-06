@@ -10,7 +10,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="http://sms.nestweaver.com/public/home">Home</a>
+								<a href="{{url('home')}}">Home</a>
 							</li>
 							<li class="active">Users Management</li>
 						</ul><!-- /.breadcrumb -->
@@ -24,7 +24,7 @@
 						  
 <div class="page-header">
 	<h1>
-		Manage Users
+		Add  Users Details
 	</h1>
 </div>
 <div class="flash-message">

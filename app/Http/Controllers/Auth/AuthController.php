@@ -100,13 +100,15 @@ class AuthController extends Controller {
         $user = Auth::getLastAttempted(); 
 
         if ($user->status==1) {
-            return view::make('home');
+         return redirect('home');
         }
 else
 { Auth::logout();
 	 Session::flush();
 $errors="Your account not activated!";
-	return Redirect::to('/')->with('status','success')->with('message','Your account not activated!');;
+	return Redirect::to('/')->withErrors([
+            'email' => 'Your account has been Deactivated!',
+        ]);
 }
 }
 

@@ -31,6 +31,7 @@
 	</h1>
 </div>
 <div class="flash-message">
+	@include('layouts.message')
 													</div>
 <div class]='row'>
 	<form class="form-horizontal" role="form" action="{{url('savesmsettings')}}"  method='post'>
@@ -40,15 +41,14 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label no-padding-right" for="txtfirstname"> Url </label>
 									<div class="col-sm-9">
-										<?php $query=DB::table('company')->where('id',Auth::user()->company_id)->first();
-										//$settings=json_decode($val->config);
-										$val=json_decode($query->config);	 ?>	 
-										<input type="text" id="txtfirstname" name='j[url]' placeholder="Url"  readonly class="col-xs-10" value='{{$val->url}}' required>
-								<span><br>{!!$errors->first('url')!!}</span>
+										
+										<select name='j[url]' class="col-xs-10" >
+										<option value="{{$sd->id}}" readonly >{{$sd->url}}</option>
+										</select>
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right" for="txtlastname"> username </label>
+									<label class="col-sm-3 control-label no-padding-right" for="txtlastname"> User Name </label>
 									<div class="col-sm-9">			
 								 					 
 										<input type="text" id="txtlastname" name='j[username]' placeholder="User Name" readonly class="col-xs-10" value='{{$val->username}}' required>
@@ -59,12 +59,12 @@
 									<label class="col-sm-3 control-label no-padding-right" for="txtemail"> Password</label>
 									<div class="col-sm-9">	
 									 							 
-										<input type="text" id="txtemail" name='j[password]' placeholder="Password" class="col-xs-10" readonly value='{{$val->password}}' required>
+										<input type="text" id="txtemail" name='j[smspwd]' placeholder="Password" class="col-xs-10" readonly value='{{$val->smspwd}}' required>
 								<br>{!!$errors->first('password')!!}
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label no-padding-right" for="txtpassword"> sendername </label>
+									<label class="col-sm-3 control-label no-padding-right" for="txtpassword"> Sender Name </label>
 									<div class="col-sm-9">
 									<input type="text" id="txtpassword" name='j[sendername]' placeholder="Mobile No" class="col-xs-10" value='{{$val->sendername}}' required>
 								<span>{!!$errors->first('sendername')!!}</span>

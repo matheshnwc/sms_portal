@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Facades\Excel;
+//use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Response;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -22,6 +22,7 @@ use App\send_sms;
 use App\Sms_status;
 use App\companyreg;
 use App\smsurl;
+use App\smscredit;
 class AdminController extends Controller {
 
   public function smsUrl()
@@ -59,7 +60,7 @@ $query=smsurl::where('id',$id)->delete();
 public function editsmsUrl($id)
 {
 	$smsdetails=smsurl::where('id',$id)->first(); 
-        $smsdetail=smsurl::where('createdby','=',Auth::user()->id)->get();
+      $smsdetail=smsurl::get();
 	//print_r($companydetails->config);
 	//$sjson=json_decode($companydetails->config);
 		return view('admin.smsurlist',compact('smsdetails','smsdetail'));
@@ -196,7 +197,7 @@ $i++;
 
 $delquery=DB::table('temp_table')->limit(1)->delete(); 
 $request->session()->flash('alert-success', 'Data Imported Successfully!');
-return redirect('importcontacts')->withInput();    }
+return redirect($request->input('route'))->withInput();    }
 
 public function movetoleads()
 {	
@@ -301,7 +302,7 @@ $user->role_id=2;
 $user->status=1;
 $user->company_id=$ids;
 $user->save();
-$request->session()->flash('alert-success', 'User Created Successfully!');
+$request->session()->flash('alert-success', 'Company Created Successfully!');
 return redirect('companylist')->withInput();
 }
 }
@@ -350,14 +351,11 @@ return redirect('companylist')->withInput();
 }
 }
 }
-public function delCompany($id)
+public function delCompany(request $request,$id)
 {
 $query=DB::table('company')->where('id',$id)->delete(); 
-if($query==1)
-{
-    //$del=User::where('company_id',)
 $request->session()->flash('alert-success', 'Company Deleted Successfully!');
-return redirect('companylist')->withInput();}
+return redirect('companylist')->withInput();
 }
 public function editcompany($id)
 {
@@ -382,6 +380,7 @@ public function contactList()
     $com=contacts::where('company_id',Auth::user()->company_id)->get();
     return view('admin.contacts',compact('com')); 
 }
+
 public function saveContact(request $request)
 {
  // print_r($_POST);exit;
@@ -422,13 +421,18 @@ public function editContact($id)
 	//print_r($companydetails->config);
 		return view('admin.contacts',compact('com','contactdetails')); 
 }
-public function delContact($id)
+public function delContact(request $request,$id)
 {
 $query=DB::table('contacts')->where('id',$id)->delete(); 
-if($query==1)
-{
-return Redirect::to('contactlist')->with('status','success')->with('message1','Contact Deleted Successfully');
+$request->session()->flash('alert-success', 'Contact Deleted Successfully!');
+return Redirect::to('contactlist');
 }
+public function settings()
+{
+	$query=DB::table('company')->where('id',Auth::user()->company_id)->first();
+    $val=json_decode($query->config);	
+    $sd=DB::table('smsurl')->where('id',$val->url)->first(); 
+	return view('admin.settings',compact('val','sd'));
 }
 public function savesmSettings(request $request)
 {
@@ -444,6 +448,7 @@ $updated_by=Auth::user()->id;
 $updated_at=date('Y-m-d H:i:s');
 $values=array('config'=>$config,'updated_at'=>$updated_at,'updatedby'=>$updated_by);
 $query=DB::table('company')->where('id',Auth::user()->company_id)->update($values);
+$request->session()->flash('alert-success', 'Sender Name Saved Successfully!');
 return Redirect::to('settings');
 }
 public function index(Request $request)
@@ -516,17 +521,17 @@ public function index(Request $request)
             
 // get the details from settings table
 		$values 	=   company::where('id','=',Auth::user()->company_id)->first();
-                $setting_data=json_decode($values->config);
+                $setting_data=json_decode($values->config); 
                 $url1 			= 	$setting_data->url; //print_r($url1);exit;
-		$username1 		= 	$setting_data->username;
-		$password1		=	$setting_data->password;
- 		$sms_credit 		=	$setting_data->smscredit; // print_r($sms_credit);exit;
+		$username 		= 	$setting_data->username;
+		$password	=	$setting_data->smspwd;
+ 		$smscredit 		=	$setting_data->smscredit;  print_r($smscredit);
                $urlconfig=smsurl::where('id',$url1)->first();
                 //print_r($urlconfig->url);exit;
                  $url 			= 	$urlconfig->url; //print_r($url1);exit;
 		// $username		= 	$urlconfig->username;
 		// $password	=	$urlconfig->password;
-		$sender_name	= 	'NWC';
+		$sender_name	= 	$setting_data->sendername;
 	    $serverURL  = $url;
 	    $uid        = $username;	//Your Username provided by ValueFirst
 	    $pwd        = htmlentities($password);
@@ -543,9 +548,10 @@ public function index(Request $request)
 	    {// print_r('hello');exit;
                 $totalsms=DB::table('sms_status')->where('company_id',Auth::user()->company_id)->get();
                //print_r($totalsms);exit;
-                $smssend=count($totalsms);  //print_r($smssend) ;exit;
-                if($smssend<=$sms_credit)
-                {                                
+                $smssend=count($totalsms);  //print_r($smssend);
+                if($smssend<$smscredit)
+                {               
+					//print_r('hello');exit;                 
 	    	$cnt=$cnt+1;
 	    	$messages=$messages.'<SMS UDH="0" CODING="2" TEXT="'.$content.'" PROPERTY="0" ID="'.$cnt.'"><ADDRESS FROM="'.$sender_name.'" TO="'.$val.'" SEQ="'.$cnt.'" TAG="some clientside random data" /></SMS>';
 	    	//print_r($messages);exit;
@@ -562,7 +568,7 @@ public function index(Request $request)
                 }
                 else
                 {
-                    return Redirect::to('sendnsms')->with('status','success')->with('message2','Sms Credit Limit reached SMS will not send!');
+                    return Redirect::to('sendnsms')->with('danger','Sms Credit Limit reached SMS will not send!');
                    // return Redirect::to('sendsms')->with('status','success')->with('message','Sms Credit Limit reached SMS will not send!');
                 }
                 }
@@ -649,7 +655,7 @@ public function index(Request $request)
 			{
 				$this->add_sms_status($val);
 			}
-                         return Redirect::to('userlist')->with('status','success')->with('message2','Sms Send Successfully!'); 
+                         return Redirect::to('userlist')->with('message2','Sms Send Successfully!'); 
 	    }
 	}
         public function addrecipient(Request $request)
@@ -670,7 +676,7 @@ public function index(Request $request)
 		$data1->seq 				=	$data['seq'];
 		$data1->sentdate 			=	$data['sentdate'];
 		$data1->sms_status_update        	= 	$data['sms_status_update'];
-                $data1->company_id 	                = 	Auth::user()->company_id;;
+        $data1->company_id 	                = 	Auth::user()->company_id;;
 		$data1->createdby 			= 	Auth::user()->id;
 		$data1->save();
 	}
@@ -678,8 +684,8 @@ public function index(Request $request)
 public function smsReports()
 	{
 		//return Auth::user()->id;
-		$data=Sms_status::where('createdby','=',Auth::user()->id)->get();
-		return view('admin.reports',compact('data'));
+		$data=Sms_status::get(); // print_r($data);exit;
+		return view('admin.adminreports',compact('data'));
 	}
         public function overallSms()
 	{
@@ -688,7 +694,8 @@ public function smsReports()
                 $values =  company::where('id','=',Auth::user()->company_id)->first();
                 $setting_data=json_decode($values->config);
 		$smscredit = $setting_data->smscredit; // print_r
-		return view('admin.overallsms',compact('data','smssend','smscredit'));
+		$sendby=User::where('id','=',Auth::user()->id)->first(); //print_r($sendby->firstname);exit;
+		return view('admin.overallsms',compact('data','smssend','smscredit','sendby'));
 	}
           public function userwiseSms()
 	{         
@@ -714,6 +721,86 @@ public function smsReports()
                 return view('admin.userwisesms',compact('datas','user','smssend'));//,'smssend','smscredit'));
 
         }
+        public function requestSms()
+        {
+			$data=smscredit::where('send_by',Auth::user()->id)->get();
+            return view('admin.requestsms',compact('data'));
+	
+		}
+		public function sendsmsRequest(Request $request)
+		{ 
+	//	print_r($_POST);exit;
+			$smscredit=new smscredit; 
+			if($request->input('id')>0)
+			{
+			$smscredit=$smscredit->find($request->input('id'));
+			$smscredit->status=$request->input('staus');
+			$smscredit->reply_message=$request->input('reply_message');
+			$smscredit->updated_at=date('Y-m-d H:i:s');
+            $smscredit->request_sms=$request->input('sms_credits');
+ 			$smscredit->status=$request->input('status');
+ 			if($request->input('status')==1)
+ 			{
+			$smscredit->credited_sms=$request->input('credited_sms');
+     		$smscredit->send_by=$request->input('send_by');
+    		$smscredit->company_id=$request->input('company_id');
+			$previous=company::where('id',$request->input('company_id'))->first();
+		    $previous_config=$previous->config; //print_r($previous_config);'<br/>';
+		    $previous_count=json_decode($previous_config);
+            $smscred=$previous_count->smscredit;
+		    $total=$smscred + $request->input('sms_credits');
+		    $previous_count->smscredit=$total;
+		    $new_count=json_encode($previous_count); 
+	        $previous1=company::where('id',$request->input('company_id'))->update(array('config'=>$new_count));
+		}
+		else
+		{
+			$smscredit->credited_sms='0';
+
+		}
+	}
+			
+    		if(empty($request->input('id')))
+    		{
+$str = '';
+for($i=4;$i>0;$i--)
+{
+    $str = $str.chr(rand(97,122)); 
+
+}           $smscredit->request_sms=$request->input('sms_credits');
+			$smscredit->message=$request->input('message');
+   			$smscredit->request_code=$str;
+			$smscredit->status='0';
+    		$smscredit->send_by=Auth::user()->id;
+    		$smscredit->company_id=Auth::user()->company_id;
+			$smscredit->created_at=date('Y-m-d H:i:s');
+		    }
+			$smscredit->save();
+			$request->session()->flash('alert-success', 'Credit SMS Request Send Successfully!');
+            return Redirect::to($request->input('route'));
+		}
+		public function smsRequest()
+        {
+			$data=smscredit::get();
+            return view('admin.smsrequest',compact('data'));
+	
+		}
+		 public function editsmsRequest($id)
+        {   
+			$data=smscredit::get();
+			$edit_data=smscredit::where('id',$id)->first(); // print_r($edit_data);exit;
+			$company=company::where('id',$edit_data->company_id)->first(); //print_r($company);exit;
+			$company_id=$company->company_name; // print_r($company_id);exit;
+            return view('admin.smsrequest',compact('data','edit_data','company_id'));
+	
+		}
+		public function delsmsRequest(request $request,$id)
+{
+$query=smscredit::where('id',$id)->delete(); 
+$request->session()->flash('alert-success', 'SMS Request Deleted Successfully!');
+return Redirect::to('smsrequests');
+
+}
         }
 
 

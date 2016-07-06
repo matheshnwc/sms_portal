@@ -48,7 +48,7 @@
 								<div class="form-group col-md-6">
 									<label> Gender</label>
 									<label class="radio-inline">
-									  <input type="radio" name="user[gender]" value="Male"> Male
+									  <input type="radio" name="user[gender]" value="Male" checked> Male
 									</label>
 									<label class="radio-inline">
 									  <input type="radio" name="user[gender]" value="Female"> Female

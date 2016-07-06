@@ -18,7 +18,7 @@
 
 				<li class="">
 						<a href="{{url('smsurl')}}">
-							<i class="menu-icon fa fa-th"></i>
+							<i class="menu-icon fa fa-cogs" aria-hidden="true"></i>
 							<span class="menu-text">Settings</span>
 						</a>
 						<b class="arrow"></b>
@@ -32,11 +32,27 @@
 					</li>
 					<li class="">
 						<a href="{{url('userlist')}}">
-							<i class="menu-icon fa fa-envelope-o"></i>
+<i class="menu-icon fa fa-users" aria-hidden="true"></i>
 							<span class="menu-text">User List</span>
 						</a>
 						<b class="arrow"></b>
 					</li>
+					<li class="">
+						<a href="{{url('smsrequests')}}">
+							<i class="menu-icon fa fa-cog"></i>
+							<span class="menu-text">SMS Requests</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+					<!--
+					<li class="">
+						<a href="{{url('adminreports')}}">
+							<i class="menu-icon fa fa-cog"></i>
+							<span class="menu-text">SMS Reports</span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+					-->
 					@elseif(Auth::user()->role_id==2)
 				 <li class="">
 						<a href="{{url('contactlist')}}">
@@ -93,15 +109,33 @@
 								<span class="menu-text">User Wise SMS</span>
 							</a>
 						</li>
+</ul>											</li>
+
+						<li class="">
+						<a href="{{url('requestsms')}}">
+							<i class="menu-icon fa fa-file-text"></i>
+							<span class="menu-text">Request Sms Credits</span>
+						</a>
+						
+						<b class="arrow"></b>
+					</li>
+						
+						
 						                                        @elseif(Auth::user()->role_id==3)
 <li class="">
-						<a href="{{url('contactlist')}}">
+						<a href="{{url('contactlists')}}">
 							<i class="menu-icon fa fa-file-text"></i>
 							<span class="menu-text">Contacts List</span>
 						</a>
 						<b class="arrow"></b>
 					</li>
-                                        @endif
+                               <li class="">
+						<a href="{{url('importcontact')}}">
+<i class="menu-icon fa fa-upload" aria-hidden="true"></i>	
+						<span class="menu-text">Import Contacts</span>
+						</a>
+						<b class="arrow"></b>
+					</li>         @endif
 					</ul>					
 				</li>
 			</ul><!-- /.nav-list -->

@@ -49,7 +49,7 @@
 			<div class="container">
 				<div class="thankyou">
 					<center>
-<i class="fa fa-camera-retro fa-5x"></i> fa-5x
+<i class="fa fa-thumbs-o-up-5x"></i> fa-5x
 						<h1 class="text-center">Thank you</h1>
           <p>Our Admin will contact you soon.</p>
           {{--<p>We've also sent an email to <b>demo.demo@gmail.com</b></p>--}}

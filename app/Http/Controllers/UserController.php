@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\User;
 use App\companyreg;
+use App\contacts;
 
 class UserController extends Controller 
 {
@@ -24,7 +25,7 @@ class UserController extends Controller
 // validate the info, create rules for the inputs
 $rules = array(
     'email'    => 'required', 
-   //// 'company_id'=>'required',
+  
 // make sure the email is an actual email
     'password' => 'required' // password can only be alphanumeric and has to be greater than 3 characters
 );
@@ -53,12 +54,14 @@ if ($validator->fails()) {
         // redirect them to the secure section or whatever
         // return Redirect::to('secure');
         // for now we'll just echo success (even though echoing in a controller is bad)
-        return View::make('home');
+         return redirect('home');
 
     } else {        
 
         // validation not successful, send back to form 
-        return View::make('login');
+        return redirect('/admin/login')->withErrors([
+            'email' => 'The email or the password is invalid. Please try again.',
+        ]);
 
     }
 
@@ -240,6 +243,58 @@ public function adminActive(requset $requset)
     $request->session()->flash('alert-success', 'Profile Updated Successfully');
    return Redirect::to('adminuserlist');
    
+}
+public function contactLists()
+{
+    $com=contacts::where('company_id',Auth::user()->company_id)->get();
+    return view('user.contacts',compact('com')); 
+}
+
+public function saveContacts(request $request)
+{
+ // print_r($_POST);exit;
+$contacts=new contacts();
+$data=$request->input();
+//print_r($data);exit;
+print_r($data['mobile_no']);
+if($_POST['id']>0)
+{
+$contacts->updated_at=date('Y-m-d H:i:s');
+$contacts=$contacts->find($_POST['id']);
+}
+if(empty($_POST['id']))
+{
+$que=DB::table('contacts')->where('firstname',$data['firstname'])->where('mobile_no',$data['mobile_no'])->first();
+if(!empty($que))
+{
+$request->session()->flash('alert-warning', 'Contact Name Or Mobile Number Already Availbale!');
+return Redirect::to('contactlists');
+}
+}
+$contacts->firstname=$data['firstname'];
+$contacts->lastname=$data['lastname'];
+$contacts->email=$data['email'];
+//print_r($contacts->mobile_no);exit;
+$contacts->mobile_no=$data['mobile_no'];
+$contacts->created_by	= Auth::user()->id;
+$contacts->created_at=date('Y-m-d H:i:s');
+$contacts->company_id=Auth::user()->company_id;
+$contacts->save();
+$request->session()->flash('alert-success', 'Contact created Successfully!');
+return Redirect::to('contactlists');
+}
+public function editContacts($id)
+{       $com=contacts::where('company_id',Auth::user()->company_id)->get();
+//print_r($com);exit;
+	$contactdetails=DB::table('contacts')->where('id',$id)->first(); 
+	//print_r($companydetails->config);
+		return view('user.contacts',compact('com','contactdetails')); 
+}
+public function delContacts(request $request,$id)
+{
+$query=contacts::where('id',$id)->delete(); 
+$request->session()->flash('alert-success', 'Contact Deleted Successfully!');
+return Redirect::to('contactlists');
 }
 }
 

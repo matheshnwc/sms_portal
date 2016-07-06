@@ -39,7 +39,6 @@
       <th>Mobileno</th>
       <th>Email</th>
       <th>Company</th>
-      <th>Createby</th>
       <th>Status</th>
       <th>Edit</th>
       <th>Delete</th>

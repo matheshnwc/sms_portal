@@ -38,7 +38,7 @@
 <div class]='row'>
 					
 									   <div class="col-lg-12">
-									<form method="post" enctype="multipart/form-data" action="importExcel">
+									<form method="post" enctype="multipart/form-data" action="importdata">
 										
 										
 							
@@ -50,7 +50,7 @@
 							  <input  id='upload' name="file" type="file" onchange="ValidateSingleInput(this);" required/>
 							</div>
 							   <div class="form-group">
-								   <input type="hidden" name="route" value="importcontacts">
+								   <input type="hidden" name="route" value="importcontact">
 					 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 				<button type="submit" class="btn btn-primary"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Import</button>
 								   </div>

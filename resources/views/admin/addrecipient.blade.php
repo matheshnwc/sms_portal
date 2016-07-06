@@ -10,7 +10,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="http://sms.nestweaver.com/public/home">Home</a>
+								<a href="{{url('home')}}">Home</a>
 							</li>
 							<li class="active">Add Recipient</li>
 						</ul><!-- /.breadcrumb -->

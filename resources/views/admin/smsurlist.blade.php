@@ -124,10 +124,12 @@
 						<div class="row">
 							<div class="form-actions clearfix">
 								<div class="col-md-offset-5 col-md-6">
+<!--
 									<button class="btn" type="button">
 										<i class="ace-icon fa fa-times bigger-110"></i>
 										Cancel
 									</button>
+-->
 									&nbsp; &nbsp; &nbsp;
 									<button class="btn btn-info" type="submit">
 										<i class="ace-icon fa fa-check bigger-110"></i>
